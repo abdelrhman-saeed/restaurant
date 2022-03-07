@@ -12,6 +12,7 @@ class AuthenticationController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+        $this->middleware('auth')->only('logout');
     }
 
     public function authentication() {
