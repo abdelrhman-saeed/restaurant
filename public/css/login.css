@@ -1,0 +1,13 @@
+.fillable {
+    margin: 1em 0;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid gray;
+    padding: 1em 0;
+}
+.input-container label {
+    font-weight: bold;
+}
+input:focus {
+    outline: none
+}
