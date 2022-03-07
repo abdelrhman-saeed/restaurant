@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('food', function (Blueprint $table) {
+        Schema::create('dishes', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->string('name');
             $table->decimal('price', 6,2);
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('food');
+        Schema::dropIfExists('dishes');
     }
 };
