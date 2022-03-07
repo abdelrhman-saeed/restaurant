@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->smallInteger('dish_id', unsigned:true);
-            $table->foreign('dish_id')->references('id')->on('dish');
+            $table->foreign('dish_id')->references('id')->on('dishes');
             
             $table->smallInteger('order_id', unsigned:true);
             $table->foreign('order_id')->references('id')->on('orders');
