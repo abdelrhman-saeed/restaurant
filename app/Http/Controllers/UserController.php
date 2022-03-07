@@ -4,9 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth')
+                ->only(['store', 'create']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -44,7 +53,7 @@ class UserController extends Controller
         $user['password'] = Hash::make($user['password']);
 
         Auth::login(User::create($user));
-        return redirect('/dashboard');
+        return redirect('/home');
     }
 
     /**
