@@ -36,6 +36,9 @@ class StoreMethodTest extends TestCase
     }
     public function testIfUserCredentialsAreInvalid()
     {
-        $this->post('users')->assertRedirect();
+        $this->actingAs(User::factory()->create())
+                    ->from('users/create')
+                    ->post('users')
+                    ->assertRedirect('users/create');
     }
 }
