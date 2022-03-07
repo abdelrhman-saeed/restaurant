@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
-{
+{   
     public function testAccessingAuthenticationMethodAsUser()
     {
         $this->actingAs(User::factory()->create())
