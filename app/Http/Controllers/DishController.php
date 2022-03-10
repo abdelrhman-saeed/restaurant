@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\foodResources;
+use App\Models\Dish;
 use Illuminate\Http\Request;
 
-class FoodResourcesController extends Controller
+class DishController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class FoodResourcesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\foodResources  $foodResources
+     * @param  \App\Models\Dish  $Dish
      * @return \Illuminate\Http\Response
      */
-    public function show(foodResources $foodResources)
+    public function show(Dish $Dish)
     {
         //
     }
@@ -52,10 +52,10 @@ class FoodResourcesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\foodResources  $foodResources
+     * @param  \App\Models\Dish  $Dish
      * @return \Illuminate\Http\Response
      */
-    public function edit(foodResources $foodResources)
+    public function edit(Dish $Dish)
     {
         //
     }
@@ -64,10 +64,10 @@ class FoodResourcesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\foodResources  $foodResources
+     * @param  \App\Models\Dish  $Dish
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, foodResources $foodResources)
+    public function update(Request $request, Dish $Dish)
     {
         //
     }
@@ -75,10 +75,10 @@ class FoodResourcesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\foodResources  $foodResources
+     * @param  \App\Models\Dish  $Dish
      * @return \Illuminate\Http\Response
      */
-    public function destroy(foodResources $foodResources)
+    public function destroy(Dish $Dish)
     {
         //
     }

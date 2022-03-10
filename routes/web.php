@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ Route::controller(AuthenticationController::class)->group(function () {
 
 Route::resource('users', UserController::class);
 
-Route::get('home', function () {
-    return 'hello';
+Route::controller(DashboardController::class)->group(function ()
+{
+    Route::get('dashboard', 'index');
 });

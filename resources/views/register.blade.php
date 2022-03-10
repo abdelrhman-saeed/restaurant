@@ -14,7 +14,7 @@
     </div>
     <div class="register col-md-7 col-sm-12 row my-5 align-items-center">
         <div class="register-form-container px-5">
-            <form action="" method="post" class="d-inline"> @csrf
+            <form action="{{url('users')}}" method="post" class="d-inline"> @csrf
                 
                 <div class="input-container">
                     <label for="name" class="font-weight-bold">User name</label>
