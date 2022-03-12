@@ -34,3 +34,6 @@ ul {
 .other-info-arrow-down {
     transform: rotate(90deg);
 }
+.error-message {
+    color: red;
+}

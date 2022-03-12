@@ -18,7 +18,13 @@ return new class extends Migration
             $table->string('name');
             $table->decimal('price', 6,2);
             $table->enum('day', [
-                'saturday', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday'
+                'Saturday',
+                'Sunday',
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday'
             ]);
             $table->timestamps();
         });

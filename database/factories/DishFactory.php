@@ -17,7 +17,8 @@ class DishFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => 'dish_'. \Illuminate\Support\Str::random(5),
+            'price' => rand(10, 1000),
         ];
     }
 }

@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
+use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +32,11 @@ Route::controller(AuthenticationController::class)->group(function () {
 
 
 Route::resource('users', UserController::class);
+Route::resource('orders', OrderController::class);
+// Route::resource('orders', OrderController::class);
+// Route::post('orders/store', function (HttpRequest $request) {
+//     dd($request->all());
+// });
 
 Route::controller(DashboardController::class)->group(function ()
 {

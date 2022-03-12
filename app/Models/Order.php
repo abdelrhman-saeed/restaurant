@@ -12,6 +12,12 @@ class Order extends Model
     protected $fillable = [
         'table_id',
         'total_price',
-        'client_count'
+        'customer_count'
     ];
+
+    public function dishes() {
+        return $this->belongsToMany(Dish::class, 'dish_orders')
+                ->withPivot('dish_count')
+                ->withTimestamps();
+    }
 }

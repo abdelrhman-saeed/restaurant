@@ -15,16 +15,16 @@ return new class extends Migration
     {
         Schema::create('dish_orders', function (Blueprint $table) {
             $table->smallIncrements('id');
-            $table->timestamps();
-
+            
             $table->smallInteger('dish_id', unsigned:true);
             $table->foreign('dish_id')->references('id')->on('dishes');
             
             $table->smallInteger('order_id', unsigned:true);
             $table->foreign('order_id')->references('id')->on('orders');
-
-            $table->smallInteger('dish_quantity');
-
+            
+            $table->smallInteger('dish_count');
+            
+            $table->timestamps();
         });
     }
 
