@@ -37,7 +37,9 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-
+        if ( ! $request->ajax()) {
+            return abort(401, 'unauthorized');
+        }
         $dishes     = Dish::whereIn('id', array_keys($request->dishes))->get();
         $dishData   = [];
 
@@ -55,20 +57,20 @@ class OrderController extends Controller
         }
 
         $request->merge(['total_price' => $total_price]);
-        
-        Order::create($request->only('table_id', 'total_price', 'customer_count'))
-        ->dishes()->attach($dishData);
 
-        return response('Done');
+        $order = Order::create($request->only('table_id', 'total_price', 'customer_count'));
+        $order->dishes()->attach($dishData);
+
+        return response(['order_id' => $order->id]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Order  $Order
+     * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function show(Order $Order)
+    public function show(Order $order)
     {
         //
     }
@@ -76,10 +78,10 @@ class OrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Order  $Order
+     * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function edit(Order $Order)
+    public function edit(Order $order)
     {
         //
     }
@@ -88,22 +90,43 @@ class OrderController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Order  $Order
+     * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Order $Order)
+    public function update(Request $request, Order $order)
     {
-        //
+        if( ! $request->ajax()) {
+            return abort(401, 'unauthorized');
+        }
+
+        // $request->validate([
+        //     ''
+        // ])
+
+        $dishes = Dish::whereIn('id', array_keys($request->dishes))->get(['id', 'price']);
+        $total_price = 0;
+
+        foreach($dishes as $dish) {
+            $total_price += $dish->price * ( $request->dishes[$dish->id]['dish_count'] );
+        }
+
+        $request->merge(['total_price' => $total_price]);
+
+        $order->dishes()->sync($request->dishes);
+        $order->update($request->only('customer_count', 'table_id', 'total_price'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Order  $Order
+     * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Order $Order)
+    public function destroy(Order $order)
     {
-        //
+        $order->dishes()->detach();
+        $order->delete();
+        
+        return response('Done!');
     }
 }

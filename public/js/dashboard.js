@@ -5,7 +5,8 @@ var select   = $(`<select name="dish_id" id="" class="dish_id enum-fillable col-
     span     = $('<span></span>'),
     input    = $('<input type="text">'),
     removeDishIcon = $('<i class="fa-solid fa-circle-xmark remove-dish"></i>');
-    removeDishIcon.on('click', function () {
+
+    removeDishIcon.on('click', function() {
         $(this).parent().parent().remove();
     });
 
@@ -14,11 +15,11 @@ function getDishInstance() {
 
     let dishInstance = select.clone(true);
     
-    for(let i = 0; i < dishes.length; i++) {
+    dishes.forEach( dish => {
         dishInstance.append(
-            option.clone().attr('value', dishes[i]['id']).text(dishes[i]['name'])
+            option.clone().attr('value', dish['id']).text(dish['name'])
         );
-    }
+    });
 
     dishInstance = $('<div class="dish_info d-inline"></div>').append(
         '<input type="text" name="dish_count" class="dish_count fillable col-4" placeholder="Count" required></input>',
@@ -29,15 +30,30 @@ function getDishInstance() {
 
 function copyAttributesFromTo(from, to)
 {
-    to.attr({
+    return to.attr({
         class: from.attr('class'),
         name: from.attr('name'),
-        value: from.text(),
-        placeholder: from.attr('placeholder')
+        placeholder: from.attr('placeholder'),
     });
-    to.text(from.val());
-    return to;
 }
+
+function copyAttributesFromTagToInput(tag, input) {
+    return copyAttributesFromTo(tag, input).attr('value', tag.text());
+}
+function copyAttributesFromInputToTag(input, tag) {
+    return copyAttributesFromTo(input, tag).text(input.val());
+}
+
+function copyAttributesFromTagToSelect(tag, select, selectedOptionValue) {
+
+    copyAttributesFromTo(tag, select)
+            .children(`option[value="${selectedOptionValue}"]`)
+            .attr('selected', 'selected');
+    return select;
+    
+}
+
+
 
 function convertManyTo(many, to) {
     many.each(function () {
@@ -46,14 +62,17 @@ function convertManyTo(many, to) {
 }
 
 
+function convertTagsToInputs(tags, input) {
+    tags.each(function () {
+        $(this).replaceWith( copyAttributesFromTagToInput($(this), input.clone()) );
+    });
+}
 
-
-
-
-
-
-
-
+function convertInputsToTag(inputs, tag) {
+    inputs.each(function () {
+        $(this).replaceWith( copyAttributesFromInputToTag($(this), tag.clone()) );
+    });
+}
 
 
 
@@ -72,78 +91,89 @@ $('.other-info-arrow').click(function () {
 
 
 
-
 $('.update-btn').click(function (e)
 {
-    e.preventDefault();
-
-    let orderListTag    = $(this).parentsUntil('li'), 
+    var orderListTag    = $(this).parents('li'), 
         fillables       = orderListTag.find('.fillable'),
-        enumFillables   = orderListTag.find('.enum-fillable');
-    
-    orderListTag.find('.add_dish_btn_container').removeClass('d-none'),
-    convertManyTo(fillables, input);
+        enumFillables   = orderListTag.find('.enum-fillable'),
+        dataToSend      = {},
+        dishDeleteBtns  = orderListTag.find('.dish .remove-dish');
+        
+        // dataToSend['deleted_dishes'] = [];
+        dataToSend['dishes'] = {};
+        dataToSend['_token'] = $('meta[name="csrf_token"]').attr('content');
 
-    dishIdSelectTag = copyAttributesFromTo(enumFillables, select.clone());
-    
-    for(i= 0; i< dishes.length; i++) {
+        orderListTag.find('.add_dish_btn_container').removeClass('d-none'),
+        convertTagsToInputs(fillables, input);
+        
+    let = dishIdSelectTag = select.clone();
 
-        dishIdSelectTag.append(
-            option.clone().attr('value', dishes[i]['id']).text(dishes[i]['name'])
+    dishes.forEach(dish => dishIdSelectTag.append(
+        option.clone().attr('value', dish['id']).text(dish['name'])
+    ));
+
+    enumFillables.each(function () {
+        $(this).replaceWith(
+            copyAttributesFromTagToSelect($(this), dishIdSelectTag.clone(), $(this).attr('value'))
         );
-
-    }
-    enumFillables = enumFillables.replaceWith(dishIdSelectTag);
-});
-
-
-
-
-
-
-
-
-
-$('.order_actions button').click(function () {
-    // $(this).parent().parent().
-    $(this).parent().parent().children().toggleClass('d-none');
-});
-
-
-
-
-
-
-
-
-
-
-
-$('.save-btn,.cancel-btn').click(function (e)
-{
-    e.preventDefault();
-
-    let orderListTag    = $(this).parentsUntil('li'), 
-        fillables       = orderListTag.find('.fillable'),
-        enumFillables   = orderListTag.find('.enum-fillable');
-
-    orderListTag.find('.add_dish_btn_container').addClass('d-none');
-
-    convertManyTo(fillables, span);
-    enumFillables.each(function ()
-    {
-        let newSpan = span.clone(),
-            selectDishName = $(this).find(' :selected').text();        
-
-        $(this).replaceWith(copyAttributesFromTo($(this), newSpan));
-        newSpan.text(selectDishName);
     });
 
+    dishDeleteBtns.removeClass('d-none');
+    
+    $('.dish .remove-dish').click(function () {
+        $(this).parent().parent().remove();
+        // dataToSend['deleted_dishes'].push( $(this).parent().find('select').val() );
+    });
+
+
+    $('.save-btn').one('click', function () {
+
+        console.log('saving');
+        console.log(orderListTag.attr('class'));
+        dataToSend['order_id'] = orderListTag.attr('id');
+        dataToSend['table_id'] = orderListTag.find('> div.row > input[name="table_id"]').val();
+        dataToSend['customer_count'] = orderListTag.find('> .other-info div.row input[name="customer_count"]').val();
+        
+        orderListTag.find('div.dishes div.dish').each( function ()
+        {
+            dataToSend['dishes'][ $(this).find('select').val() ] = { // setting the dish_id as a key
+                dish_count: $(this).find('input[name="dish_count"]').val() // setting the dish count as in array: [dish_count: number]
+            };
+        });
+
+        dataToSend['_method'] = 'PUT';
+
+        console.log(dataToSend);
+        $.ajax({
+            url: 'http://localhost/restaurant/public/orders/' + dataToSend['order_id'],
+            method: 'post',
+            data: dataToSend,
+            
+            success: (res) => console.log(res),
+            error: (res) => console.log(res),
+        });
+    });
+
+    $('.save-btn,.cancel-btn').one('click', function (e)
+    {
+        dishDeleteBtns.addClass('d-none');
+        orderListTag.find('.add_dish_btn_container').addClass('d-none');
+
+        convertInputsToTag(orderListTag.find('.fillable'), span);
+        orderListTag.find('.enum-fillable').each(function ()
+        {
+            let newSpan = span.clone(),
+                selectDishName = $(this).find(' :selected').text();        
+
+            $(this).replaceWith(copyAttributesFromTo($(this), newSpan));
+            newSpan.text(selectDishName);
+        });
+
+    });
+
+    
 });
 
-// $('.save-btn').click(function () {
-
-// });
 
 
 
@@ -152,6 +182,10 @@ $('.save-btn,.cancel-btn').click(function (e)
 
 
 
+$('.order_actions button').click(function (e) {
+    e.preventDefault();
+    $(this).parent().parent().children().toggleClass('d-none');
+});
 
 
 
@@ -165,18 +199,8 @@ $('.new-order-btn').click(function () {
 
 
 
-
-
-
-
-
-
-
-
-
 $('.add_dish').click(function (e)
 {
-    e.preventDefault();
     let dishesInfo = $(this).parent().parent().next('.dishes-info'),
         dishes = dishesInfo.find('.dishes');
         dishes.append(getDishInstance());
@@ -184,14 +208,8 @@ $('.add_dish').click(function (e)
 
 
 
-
-
-
-
-
-
 $('form').submit(function (e) {
-    
+
     e.preventDefault();
     
     var form = $(this),
@@ -208,8 +226,6 @@ $('form').submit(function (e) {
         }
         return false;
     }
-    form.find('.add_dish_btn_container').addClass('d-none');
-
 
     dishes.each(function (index, element) {
         dataToSend['dishes'][
@@ -218,6 +234,7 @@ $('form').submit(function (e) {
     });
 
     dataToSend['_token'] = $('meta[name="csrf_token"]').attr('content');
+    console.log(dataToSend);
 
     $.ajax({
 
@@ -227,36 +244,56 @@ $('form').submit(function (e) {
 
         success: (res) => {
 
+            console.log(res);
+            form.find('.add_dish_btn_container').addClass('d-none');
+
             let fillables       = $(this).children().find('.fillable'),
                 enumFillables   = $(this).children().find('.enum-fillable');
     
-            convertManyTo(fillables, span);
+            convertInputsToTag(fillables, span);
             enumFillables.each(function () {
 
                 let newSpan = span.clone(),
                     selectDishName = $(this).find(' :selected').text();        
         
-                $(this).replaceWith(copyAttributesFromTo($(this), newSpan));
+                $(this).replaceWith(copyAttributesFromInputToTag($(this), newSpan));
                 newSpan.text(selectDishName);
+
+                
             });
 
             let createBtnform = form.find('.create_btn_container');
                 createBtnform.toggleClass('d-none');
                 createBtnform.nextAll().toggleClass('d-none');
 
-            console.log(dataToSend, res);
+            $(this).parents('li').attr('id', res['order_id']);
         },
 
-        // error: (err) => console.log(err)
+        error: (err) => {
+            console.log(err);
+            if (form.children('.error-message').length == 0) {
+                form.prepend('<p class="error-message">Your Inputs Are Not Valid ! </p>');
+            }
+        }
     });
 });
 
 // deleting
 
-$('.dish .remove-dish').click(function () {
-    $(this).parent().parent().remove();
-});
-
 $('.delete-btn').click(function () {
-    $(this).parents('li').remove();
+    let orderList = $(this).parents('li');
+    $.ajax({
+        url: 'http://localhost/restaurant/public/orders/' + orderList.attr('id'),
+        method: 'post',
+        data: {
+            _token: $('meta[name="csrf_token"]').attr('content'),
+            _method: 'DELETE'
+        },
+        
+        success: (res) => {
+            $(this).parents('li').remove();
+            console.log(res);
+        },
+        error: (res) => console.log(res)
+    });
 });

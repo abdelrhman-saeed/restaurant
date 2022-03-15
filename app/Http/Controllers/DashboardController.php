@@ -15,7 +15,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('dashboard', ['orders' => Order::all(), 'dishes' => Dish::all()]);
+        return view('dashboard', ['orders' => Order::orderByDesc('id')->get(), 'dishes' => Dish::all()]);
     }
 
     /**

@@ -15,9 +15,8 @@
         </select>        
 
         <li class="py-4 muted-border row justify-content-between align-items-center">
-            <span class="order_time col-1">Time</span>
-            <span class="order_table_id col-1 text-secondary">Table</span>
-            <span class="order_dishes col-8 text-secondary">Dishes</span>
+            <span class="order_time col-3">Time</span>
+            <span class="order_table_id col-7 text-secondary">Table number</span>
             <button class="btn btn-dark new-order-btn col-2 p-3"> New Order </button>
         </li>
 
@@ -27,9 +26,9 @@
             <form action="{{url('orders')}}" method="POST" class="needs-validation order-data"> @csrf
                 
                 <div class="row justify-content-between">
-                    <span class="order_time col-1">14:39</span>
+                    <span class="order_time col-1">{{now()->format('h:i')}}</span>
                     <input type="text" name="table_id" class="fillable table_id col-1 text-secondary" placeholder="table" required>
-                    <span class="order_dishes col-9 text-secondary">Rice Chips, Bear</span>
+                    <span class="order_dishes col-9 text-secondary">Dishes</span>
                     <span class="col-1 other-info-arrow"><i class="fa-solid fa-angle-right"></i></span>
                 </div>
 
@@ -58,7 +57,7 @@
 
                         <div class="dishes row">
             
-                            <div class="dish border rounded p-3 col-4 m-2">
+                            <div class="dish border rounded p-3 col-4">
                                 <div class="dish_info d-inline">
                                     <input type="text" name="dish_count" class="dish_count fillable col-4" placeholder="Count" required>
                                     <select name="dish_id" id="" class="dish_id enum-fillable col-4 mx-2 p-1 d-inline">
@@ -96,12 +95,15 @@
         {{--  form instance --}}
 
         @foreach($orders as $order)
-            <li class="py-4 muted-border order">
+            <li id="{{$order->id}}" class="order-info py-4 muted-border order">
 
                 <div class="row justify-content-between">
-                    <span class="order_time col-1">14:39</span>
-                    <span class="fillable table_id col-1 text-secondary" placeholder="table">{{$order->table_id}}</span>
-                    <span class="order_dishes col-9 text-secondary">Rice Chips, Bear</span>
+                    <div class="row col-10">
+                        <span class="order-number col-3">Order - {{$order->id}}</span>
+                        <span class="order_time col-3">{{now()->create($order->created_at)->format('m:d / h:i A')}}</span>
+                        <span class="fillable table_id col-1 text-secondary" name="table_id" placeholder="table">{{$order->table_id}}</span>
+                    </div>
+                    
                     <span class="col-1 other-info-arrow"><i class="fa-solid fa-angle-right"></i></span>
                 </div>
 
@@ -109,7 +111,7 @@
 
                     <div class="row">
                         <div class="col-3">
-                            <span class="customer_count fillable col-4" placeholder="number">{{$order->customer_count}}</span>
+                            <span class="customer_count fillable col-4" name="customer_count" placeholder="number">{{$order->customer_count}}</span>
                             <span>Customers</span>
                         </div>
                         <div class="col-3">
@@ -127,14 +129,15 @@
                             <p class="col-12">Dishes:</p>
                         </div>
 
-                        <div class="dishes row">
+                        <div class="dishes row justify-content-between">
 
                             @foreach($order->dishes as $dish)
-                                <div class="dish col-4 my-1">
-                                    <div class="dish_info d-inline border rounded p-3">
-                                        <span class="dish_count border-right fillable col-3" placeholder="quantity">{{$dish->pivot->dish_count}}</span>
-                                        <span name="dish_id" value="{{$dish->id}}" class="dish_id enum-fillable col-3 mx-2 d-inline" placeholder="Dish">{{$dish->name}}</span>
+                                <div class="dish col-5 mb-3">
+                                    <div class="dish_info border rounded p-3 row justify-content-around align-items-center">
+                                        <span class="dish_count border-right fillable col-3" name="dish_count" placeholder="count">{{$dish->pivot->dish_count}}</span>
+                                        <span name="dish_id" value="{{$dish->id}}" class="dish_id enum-fillable col-4 mx-2 d-inline" placeholder="Dish">{{$dish->name}}</span>
                                         <span class="dish_total_price col-3">${{$dish->pivot->dish_count * $dish->price}}</span>
+                                        <i class="fa-solid col-1 fa-circle-xmark remove-dish d-none"></i>
                                     </div>
                                 </div>
                             @endforeach
