@@ -17,13 +17,16 @@ return new class extends Migration
             $table->smallIncrements('id');
             
             $table->smallInteger('dish_id', unsigned:true);
-            $table->foreign('dish_id')->references('id')->on('dishes');
+            $table->foreign('dish_id')->references('id')->on('dishes')
+                    ->onDelete('cascade')
+                    ->onUpdate('cascade');
             
             $table->smallInteger('order_id', unsigned:true);
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('order_id')->references('id')->on('orders')
+                    ->onDelete('cascade')
+                    ->onUpdate('cascade');
             
             $table->smallInteger('dish_count');
-            
             $table->timestamps();
         });
     }

@@ -1,10 +1,10 @@
 
 
-var select   = $(`<select name="dish_id" id="" class="dish_id enum-fillable col-4 mx-2 p-1 d-inline"></select>`),
+var select   = $(`<select name="dish_id" id="" class="dish_id enum-fillable col-4 mx-2 d-inline"></select>`),
     option   = $('<option value=""></option>'),
     span     = $('<span></span>'),
     input    = $('<input type="text">'),
-    removeDishIcon = $('<i class="fa-solid fa-circle-xmark remove-dish"></i>');
+    removeDishIcon = $('<i class="fa-solid fa-circle-xmark remove-dish col-1"></i>');
 
     removeDishIcon.on('click', function() {
         $(this).parent().parent().remove();
@@ -21,11 +21,14 @@ function getDishInstance() {
         );
     });
 
-    dishInstance = $('<div class="dish_info d-inline"></div>').append(
-        '<input type="text" name="dish_count" class="dish_count fillable col-4" placeholder="Count" required></input>',
-        dishInstance, removeDishIcon.clone(true, true));
+    dishInstance = $(
+        '<div class="dish_info border rounded p-3 row justify-content-around align-items-center"></div>').append(
+        '<input type="text" name="dish_count" class="dish_count fillable col-3" placeholder="Count" required></input>',
+        dishInstance,
+        span.clone().addClass('dish_total_price col-3').text('$0'),
+        removeDishIcon.clone(true, true));
 
-    return $('<div class="dish border rounded p-3 col-4 m-2"></div>').append(dishInstance);
+    return $('<div class="dish col-5 mb-3"></div>').append(dishInstance);
 }
 
 function copyAttributesFromTo(from, to)
@@ -99,7 +102,6 @@ $('.update-btn').click(function (e)
         dataToSend      = {},
         dishDeleteBtns  = orderListTag.find('.dish .remove-dish');
         
-        // dataToSend['deleted_dishes'] = [];
         dataToSend['dishes'] = {};
         dataToSend['_token'] = $('meta[name="csrf_token"]').attr('content');
 
@@ -122,16 +124,13 @@ $('.update-btn').click(function (e)
     
     $('.dish .remove-dish').click(function () {
         $(this).parent().parent().remove();
-        // dataToSend['deleted_dishes'].push( $(this).parent().find('select').val() );
     });
 
 
     $('.save-btn').one('click', function () {
 
-        console.log('saving');
-        console.log(orderListTag.attr('class'));
         dataToSend['order_id'] = orderListTag.attr('id');
-        dataToSend['table_id'] = orderListTag.find('> div.row > input[name="table_id"]').val();
+        dataToSend['table_id'] = orderListTag.find('input[name="table_id"]').val();
         dataToSend['customer_count'] = orderListTag.find('> .other-info div.row input[name="customer_count"]').val();
         
         orderListTag.find('div.dishes div.dish').each( function ()
@@ -140,10 +139,11 @@ $('.update-btn').click(function (e)
                 dish_count: $(this).find('input[name="dish_count"]').val() // setting the dish count as in array: [dish_count: number]
             };
         });
-
+        
         dataToSend['_method'] = 'PUT';
 
         console.log(dataToSend);
+
         $.ajax({
             url: 'http://localhost/restaurant/public/orders/' + dataToSend['order_id'],
             method: 'post',
@@ -163,10 +163,11 @@ $('.update-btn').click(function (e)
         orderListTag.find('.enum-fillable').each(function ()
         {
             let newSpan = span.clone(),
-                selectDishName = $(this).find(' :selected').text();        
+                selectDishName = $(this).find(' :selected').text();
 
+            newSpan.attr({ selected: 'selected', value: $(this).val() }).text(selectDishName);
             $(this).replaceWith(copyAttributesFromTo($(this), newSpan));
-            newSpan.text(selectDishName);
+            // copyAttributesFromTagToSelect($(this), dishIdSelectTag.clone(), $(this).attr('value'))
         });
 
     });
@@ -228,13 +229,13 @@ $('form').submit(function (e) {
     }
 
     dishes.each(function (index, element) {
-        dataToSend['dishes'][
-            $(this).find('select[name="dish_id"]').val()]
-            = $(this).find('input[name="dish_count"]').val();
+        dataToSend['dishes'][index] = {
+            dish_id: $(this).find('select[name="dish_id"]').val(),
+            dish_count: $(this).find('input[name="dish_count"]').val()
+        };
     });
 
     dataToSend['_token'] = $('meta[name="csrf_token"]').attr('content');
-    console.log(dataToSend);
 
     $.ajax({
 

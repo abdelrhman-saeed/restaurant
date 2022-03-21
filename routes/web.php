@@ -33,10 +33,6 @@ Route::controller(AuthenticationController::class)->group(function () {
 
 Route::resource('users', UserController::class);
 Route::resource('orders', OrderController::class);
-// Route::resource('orders', OrderController::class);
-// Route::post('orders/store', function (HttpRequest $request) {
-//     dd($request->all());
-// });
 
 Route::controller(DashboardController::class)->group(function ()
 {

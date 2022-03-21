@@ -15,17 +15,10 @@ return new class extends Migration
     {
         Schema::create('dishes', function (Blueprint $table) {
             $table->smallIncrements('id');
+            
             $table->string('name');
             $table->decimal('price', 6,2);
-            $table->enum('day', [
-                'Saturday',
-                'Sunday',
-                'Monday',
-                'Tuesday',
-                'Wednesday',
-                'Thursday',
-                'Friday'
-            ]);
+
             $table->timestamps();
         });
     }

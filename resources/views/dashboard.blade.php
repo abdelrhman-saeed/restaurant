@@ -101,7 +101,7 @@
                     <div class="row col-10">
                         <span class="order-number col-3">Order - {{$order->id}}</span>
                         <span class="order_time col-3">{{now()->create($order->created_at)->format('m:d / h:i A')}}</span>
-                        <span class="fillable table_id col-1 text-secondary" name="table_id" placeholder="table">{{$order->table_id}}</span>
+                        <span class="fillable table_id col-4 text-secondary" name="table_id" placeholder="table">Table - {{$order->table_id}}</span>
                     </div>
                     
                     <span class="col-1 other-info-arrow"><i class="fa-solid fa-angle-right"></i></span>
@@ -111,12 +111,12 @@
 
                     <div class="row">
                         <div class="col-3">
+                            <span>Customers -</span>
                             <span class="customer_count fillable col-4" name="customer_count" placeholder="number">{{$order->customer_count}}</span>
-                            <span>Customers</span>
                         </div>
                         <div class="col-3">
-                            <span>total price: </span>
-                            <span class="total_price col-3">${{$order->total_price}}</span>
+                            
+                            <span class="total_price col-3">Total Price : ${{$order->total_price}}</span>
                         </div>
                         <div class="col-3 add_dish_btn_container d-none">
                             <button class="add_dish btn btn-dark">add Dish</button>

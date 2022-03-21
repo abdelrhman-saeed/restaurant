@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Dish;
 use App\Models\DishOrders;
 use App\Models\Order;
+use App\Http\Requests\StoreOrderRequest;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -16,7 +17,6 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -35,31 +35,11 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreOrderRequest $request)
     {
-        if ( ! $request->ajax()) {
-            return abort(401, 'unauthorized');
-        }
-        $dishes     = Dish::whereIn('id', array_keys($request->dishes))->get();
-        $dishData   = [];
-
-        foreach($request->dishes as $dishID => $dishCount) {
-            $dishData[] = [
-                'dish_id' => $dishID,
-                'dish_count' => $dishCount
-            ];
-        };
-
-        $total_price = 0;
-
-        foreach($dishes as $dish) {
-            $total_price += $dish->price * $request->dishes[$dish->id];
-        }
-
-        $request->merge(['total_price' => $total_price]);
-
-        $order = Order::create($request->only('table_id', 'total_price', 'customer_count'));
-        $order->dishes()->attach($dishData);
+        ( $order = Order::create($request->only('table_id', 'customer_count')) )
+                        ->dishes()
+                        ->attach($request->dishes);
 
         return response(['order_id' => $order->id]);
     }
@@ -72,7 +52,6 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
     }
 
     /**
@@ -95,25 +74,8 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        if( ! $request->ajax()) {
-            return abort(401, 'unauthorized');
-        }
-
-        // $request->validate([
-        //     ''
-        // ])
-
-        $dishes = Dish::whereIn('id', array_keys($request->dishes))->get(['id', 'price']);
-        $total_price = 0;
-
-        foreach($dishes as $dish) {
-            $total_price += $dish->price * ( $request->dishes[$dish->id]['dish_count'] );
-        }
-
-        $request->merge(['total_price' => $total_price]);
-
         $order->dishes()->sync($request->dishes);
-        $order->update($request->only('customer_count', 'table_id', 'total_price'));
+        $order->update($request->only('customer_count', 'table_id'));
     }
 
     /**
@@ -124,9 +86,6 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        $order->dishes()->detach();
         $order->delete();
-        
-        return response('Done!');
     }
 }
