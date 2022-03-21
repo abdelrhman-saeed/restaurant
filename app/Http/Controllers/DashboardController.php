@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dish;
+use App\Models\DishOrders;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -15,8 +17,10 @@ class DashboardController extends Controller
      */
     public function index()
     {
-
-        return view('dashboard', ['orders' => Order::orderByDesc('id')->get(), 'dishes' => Dish::all()]);
+        return view('dashboard', [
+            'orders' => Order::orderByDesc('id')->get(),
+            'dishes' => Dish::all(),
+        ]);
     }
 
     /**

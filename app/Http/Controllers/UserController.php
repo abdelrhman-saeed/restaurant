@@ -50,8 +50,6 @@ class UserController extends Controller
             'password'  => 'required|confirmed'
         ]);
 
-        $user['password'] = Hash::make($user['password']);
-
         Auth::login(User::create($user));
         return redirect('/dashboard');
     }

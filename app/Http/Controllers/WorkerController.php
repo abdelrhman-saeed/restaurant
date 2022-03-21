@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\worker;
+use App\Http\Requests\StoreWorkerRequest;
+use App\Models\Worker;
 use Illuminate\Http\Request;
 
 class WorkerController extends Controller
@@ -14,7 +15,7 @@ class WorkerController extends Controller
      */
     public function index()
     {
-        //
+        return view('worker', ['workers' => Worker::all()]);
     }
 
     /**
@@ -24,7 +25,7 @@ class WorkerController extends Controller
      */
     public function create()
     {
-        //
+        return $this->index();
     }
 
     /**
@@ -33,9 +34,10 @@ class WorkerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreWorkerRequest $request)
     {
-        //
+        Worker::create($request->all());
+        return back();
     }
 
     /**
@@ -57,7 +59,7 @@ class WorkerController extends Controller
      */
     public function edit(worker $worker)
     {
-        //
+        return view('worker_edit', ['worker' => $worker]);
     }
 
     /**
@@ -67,9 +69,10 @@ class WorkerController extends Controller
      * @param  \App\Models\worker  $worker
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, worker $worker)
+    public function update(StoreWorkerRequest $request, worker $worker)
     {
-        //
+        $worker->update($request->all());
+        return redirect('workers');
     }
 
     /**
@@ -80,6 +83,7 @@ class WorkerController extends Controller
      */
     public function destroy(worker $worker)
     {
-        //
+        $worker->delete();
+        return back();
     }
 }

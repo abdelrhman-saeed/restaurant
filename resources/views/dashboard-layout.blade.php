@@ -29,29 +29,33 @@
 
                         <div class="list-items text-secondary">
                             <ul class="p-0">
-                                <li class="my-4">
-                                    <i class="fa-solid fa-chart-bar"></i>  
-                                    <span class="mx-2">Dashboard</span>
-                                </li>
 
                                 <li class="my-4">
                                     <i class="fa-solid fa-utensils"></i>
-                                    <span class="mx-2">Orders</span>
+                                    <a href="{{url('dashboard')}}" class="text-decoration-none link-secondary">
+                                        <span class="mx-2">Orders</span>
+                                    </a>
                                 </li>
                                 
                                 <li class="my-4">
                                     <i class="fa-brands fa-elementor"></i>
-                                    <span class="mx-2">Menu</span>
+                                    <a href="{{url('dishes')}}" class="text-decoration-none link-secondary">
+                                        <span class="mx-2">Dishes</span>
+                                    </a>
                                 </li>
 
                                 <li class="my-4">
                                     <i class="fa-solid fa-user"></i>
-                                    <span class="mx-2">Employees</span>
+                                    <a href="{{url('workers')}}" class="text-decoration-none link-secondary"">
+                                        <span class="mx-2">Employees</span>
+                                    </a>
                                 </li>
 
                                 <li class="my-4">
                                     <i class="fa-solid fa-boxes-stacked"></i>
-                                    <span class="mx-2">Inventory</span>
+                                    <a href="{{url('resources')}}" class="text-decoration-none link-secondary">
+                                        <span class="mx-2">Inventory</span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -74,16 +78,12 @@
                             <h6 class="text-secondary">Visitors today</h6>
 
                             <p>
-                                <span class="h1">43</span>
-                                <span>
-                                    <i class="bi bi-dot text-danger"></i>
-                                    3 now
-                                </span>
+                                <span class="h1">{{$visitorsByToday}}</span>
                             </p>
                         </div>
                         <div class="restaurant-card income-for-today col">
                             <h6 class="text-secondary">Today's income</h6>
-                            <p class="h1">$2547</p>
+                            <p class="h1">${{$incomeByToday}}</p>
                         </div>
                     </div>
 
@@ -91,20 +91,14 @@
                         <div class="restaurant-card">
                             <h6 class="text-secondary">Best Selling Dishes</h6>
                             <ul class="p-0">
-                                <li class="my-3 row justify-content-center">
-                                    <span class="col">item-name</span>
-                                    <span class="col-4">4545</span>
-                                </li>
+                                @foreach ($bestDishes as $bestDish)
+                                    
+                                    <li class="my-3 row justify-content-center">
+                                        <span class="col">{{$bestDish->name}}</span>
+                                        <span class="col-4">${{$bestDish->price}}</span>
+                                    </li>
 
-                                <li class="my-3 row justify-content-center">
-                                    <span class="col">item-name</span>
-                                    <span class="col-4">4545</span>
-                                </li>
-
-                                <li class="my-3 row justify-content-center">
-                                    <span class="col">item-name</span>
-                                    <span class="col-4">4545</span>
-                                </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -119,43 +113,17 @@
 
             <div class="dashboard-income col-3 p-4 position-relative h-100 m-0">
                 <div class="position-fixed col-2">
-                    <select name="" class="btn btn-dark p-3" id="">
-                        <option value="week">This Week</option>
-                        <option value="month">This Month</option>
-                        <option value="year">This Year</option>
-                    </select>
                     
                     <div class="totals row my-3">
                         <div class="total-income col">
                             <p>Total Income</p>
-                            <h3>$4 674</h3>
+                            <h3>${{$totalIncome}}</h3>
                         </div>
                         
                         <div class="total-orders col">
                             <p>Total Orders</p>
-                            <h3>642</h3>
+                            <h3>{{$totalOrders}}</h3>
                         </div>
-                    </div>
-                    
-                    <div class="payments my-5">
-                        <p class=" text-secondary">payments</p>
-                        <ul class="p-0">
-                            <li class="my-3 py-3 muted-border">
-                                <h6>Cash</h6>
-                                <div class="row text-secondary">
-                                    <span class="col">234 orders</span>
-                                    <span class="col">$345</span>
-                                </div>
-                            </li>
-                            
-                            <li class="my-3 py-3 muted-border">
-                                <h6>Credit Card</h6>
-                                <div class="row text-secondary">
-                                    <span class="col">234 orders</span>
-                                    <span class="col">$345</span>
-                                </div>
-                            </li>
-                        </ul>
                     </div>
                 </div>
 

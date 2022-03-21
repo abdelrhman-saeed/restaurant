@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DishController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WorkerController;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,8 +36,12 @@ Route::controller(AuthenticationController::class)->group(function () {
 
 Route::resource('users', UserController::class);
 Route::resource('orders', OrderController::class);
+Route::resource('dishes', DishController::class);
+Route::resource('workers', WorkerController::class);
+Route::resource('resources', ResourceController::class);
 
-Route::controller(DashboardController::class)->group(function ()
-{
+
+Route::controller(DashboardController::class)->group(function () {
     Route::get('dashboard', 'index');
 });
+

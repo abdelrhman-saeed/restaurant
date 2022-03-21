@@ -101,7 +101,8 @@
                     <div class="row col-10">
                         <span class="order-number col-3">Order - {{$order->id}}</span>
                         <span class="order_time col-3">{{now()->create($order->created_at)->format('m:d / h:i A')}}</span>
-                        <span class="fillable table_id col-4 text-secondary" name="table_id" placeholder="table">Table - {{$order->table_id}}</span>
+                        Table - 
+                        <span class="fillable table_id col-4 text-secondary" name="table_id" placeholder="table">{{$order->table_id}}</span>
                     </div>
                     
                     <span class="col-1 other-info-arrow"><i class="fa-solid fa-angle-right"></i></span>

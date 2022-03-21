@@ -18,8 +18,8 @@ return new class extends Migration
             
             $table->string('name');
             $table->decimal('price', 6,2);
-            $table->smallInteger('qunatity');
-            
+
+            $table->smallInteger('quantity'); 
             $table->timestamps();
         });
     }

@@ -14,7 +14,7 @@ class DishController extends Controller
      */
     public function index()
     {
-        //
+        return view('dishes', ['dishes' => Dish::all()]);
     }
 
     /**
@@ -35,7 +35,14 @@ class DishController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:dishes',
+            'price' => 'required'
+        ]);
+
+        Dish::create($request->only('name', 'price'));
+        return back();
+
     }
 
     /**
@@ -55,9 +62,9 @@ class DishController extends Controller
      * @param  \App\Models\Dish  $Dish
      * @return \Illuminate\Http\Response
      */
-    public function edit(Dish $Dish)
+    public function edit(Dish $dish)
     {
-        //
+        return view('dishes_edit', ['dish' => $dish]);
     }
 
     /**
@@ -67,9 +74,16 @@ class DishController extends Controller
      * @param  \App\Models\Dish  $Dish
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Dish $Dish)
+    public function update(Request $request, Dish $dish)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required'
+        ]);
+
+        // dd($request->only('name', 'price'));
+        $dish->update($request->only('name', 'price'));
+        return redirect('dishes');
     }
 
     /**
@@ -78,8 +92,9 @@ class DishController extends Controller
      * @param  \App\Models\Dish  $Dish
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Dish $Dish)
+    public function destroy(Dish $dish)
     {
-        //
+        $dish->delete();
+        return back();
     }
 }

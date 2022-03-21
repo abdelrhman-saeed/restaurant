@@ -85,15 +85,6 @@ $('.other-info-arrow').click(function () {
 });
 
 
-
-
-
-
-
-
-
-
-
 $('.update-btn').click(function (e)
 {
     var orderListTag    = $(this).parents('li'), 
@@ -171,7 +162,6 @@ $('.update-btn').click(function (e)
         });
 
     });
-
     
 });
 
