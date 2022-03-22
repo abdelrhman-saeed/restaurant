@@ -33,7 +33,7 @@ class AuthenticationController extends Controller
         if (auth()->attempt($request->only('name', 'password'), $request->remember_me)) {
             return redirect('dashboard');
         }
-        return abort(401, 'invalid credentials');
+        return back()->withErrors(['unauthorized' => ['Your Credentials are invalid']]);
     }
 
     public function logout(Request $request)
