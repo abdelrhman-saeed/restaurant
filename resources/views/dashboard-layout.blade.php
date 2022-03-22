@@ -14,7 +14,7 @@
 @section('body')
     
     <div class="dashboard-container h-100">
-        <div class="dashboard row h-100 m-0">
+        <div class="dashboard row h-100 m-0 justify-content-between">
 
             <div class="dashboard-list bg-muted col-2 position-relative top-0 h-100 m-0">
                 <div class="components bg-muted h-100 px-3 position-fixed">
@@ -22,6 +22,7 @@
                     <div class="list-component my-3 user row align-items-center py-3 muted-border">
                         <h6 class="user-name col-12">Abdelrhman</h6>
                         <p class="text-secondary user-role col-12">developer</p>
+                        <a href="{{url('logout')}}">logout</a>
                     </div>
 
                     <div class="list-component dashboard-resources h-75">
@@ -112,7 +113,7 @@
             </div>
 
             <div class="dashboard-income col-3 p-4 position-relative h-100 m-0">
-                <div class="position-fixed col-2">
+                <div class="position-fixed-col-12">
                     
                     <div class="totals row my-3">
                         <div class="total-income col">

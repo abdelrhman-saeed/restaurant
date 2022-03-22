@@ -15,16 +15,17 @@ return new class extends Migration
     {
         Schema::create('reserved_tables', function (Blueprint $table) {
             $table->smallIncrements('id');
-            $table->timestamps();
-
+            
             $table->smallInteger('table_id', unsigned:true);
             $table->foreign('table_id')->references('id')->on('tables');
-
+            
             $table->string('customer_name');
             $table->string('customer_email')->nullable();
             
             $table->char('customer_phone', 11);
-            $table->date('reserve_date');
+            $table->tinyint('customer_count');
+            
+            $table->timestamps();
         });
     }
 

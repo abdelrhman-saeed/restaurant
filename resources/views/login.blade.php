@@ -34,9 +34,15 @@
                 </div>
                 <input type="submit" value="Login" class="btn btn-dark">
             </form>
-            <a href="{{url('/register')}}" class="d-inline">
+            <a href="{{url('/users/create')}}" class="d-inline">
                 <button class="btn btn-dark">Register</button>
             </a>
+
+            <div class="my-3" style="color: #c90505">
+                @error('unauthorized')
+                {{$message}}
+                @enderror
+            </div>
         </div>
     </div>
 </div>
