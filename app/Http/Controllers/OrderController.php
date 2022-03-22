@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\order;
+use App\Models\Dish;
+use App\Models\DishOrders;
+use App\Models\Order;
+use App\Http\Requests\StoreOrderRequest;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -14,7 +17,6 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -33,29 +35,32 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreOrderRequest $request)
     {
-        //
+        ( $order = Order::create($request->only('table_id', 'customer_count')) )
+                        ->dishes()
+                        ->attach($request->dishes);
+
+        return response(['order_id' => $order->id]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\order  $order
+     * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function show(order $order)
+    public function show(Order $order)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\order  $order
+     * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function edit(order $order)
+    public function edit(Order $order)
     {
         //
     }
@@ -64,22 +69,23 @@ class OrderController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\order  $order
+     * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, order $order)
+    public function update(Request $request, Order $order)
     {
-        //
+        $order->dishes()->sync($request->dishes);
+        $order->update($request->only('customer_count', 'table_id'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\order  $order
+     * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function destroy(order $order)
+    public function destroy(Order $order)
     {
-        //
+        $order->delete();
     }
 }

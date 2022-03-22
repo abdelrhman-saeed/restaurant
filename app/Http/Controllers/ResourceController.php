@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\resource;
+use App\Models\Resource;
 use Illuminate\Http\Request;
 
 class ResourceController extends Controller
@@ -14,7 +14,7 @@ class ResourceController extends Controller
      */
     public function index()
     {
-        //
+        return view('resources', ['resources' => Resource::all() ]);
     }
 
     /**
@@ -24,7 +24,6 @@ class ResourceController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -35,7 +34,15 @@ class ResourceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required',
+            'quantity' => 'required'
+        ]);
+
+
+        Resource::create($request->only('name', 'price', 'quantity'));
+        return back();
     }
 
     /**
@@ -57,7 +64,7 @@ class ResourceController extends Controller
      */
     public function edit(resource $resource)
     {
-        //
+        return view('resources_edit', ['resource' => $resource]);
     }
 
     /**
@@ -69,7 +76,14 @@ class ResourceController extends Controller
      */
     public function update(Request $request, resource $resource)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required',
+            'quantity' => 'required'
+        ]);
+
+        $resource->update($request->only('name', 'price', 'quantity'));
+        return redirect('resources');
     }
 
     /**
@@ -80,6 +94,7 @@ class ResourceController extends Controller
      */
     public function destroy(resource $resource)
     {
-        //
+        $resource->delete();
+        return back();
     }
 }

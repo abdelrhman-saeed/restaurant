@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\foodOrders;
+use App\Models\Dish;
+use App\Models\DishOrders;
+use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class FoodOrdersController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +17,10 @@ class FoodOrdersController extends Controller
      */
     public function index()
     {
-        //
+        return view('dashboard', [
+            'orders' => Order::orderByDesc('id')->get(),
+            'dishes' => Dish::all(),
+        ]);
     }
 
     /**
@@ -41,10 +47,10 @@ class FoodOrdersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\foodOrders  $foodOrders
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(foodOrders $foodOrders)
+    public function show($id)
     {
         //
     }
@@ -52,10 +58,10 @@ class FoodOrdersController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\foodOrders  $foodOrders
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(foodOrders $foodOrders)
+    public function edit($id)
     {
         //
     }
@@ -64,10 +70,10 @@ class FoodOrdersController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\foodOrders  $foodOrders
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, foodOrders $foodOrders)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -75,10 +81,10 @@ class FoodOrdersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\foodOrders  $foodOrders
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(foodOrders $foodOrders)
+    public function destroy($id)
     {
         //
     }

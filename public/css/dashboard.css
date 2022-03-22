@@ -1,0 +1,39 @@
+html
+{
+    font-size: 14px;
+}
+.font-weight-bold {
+    font-weight: bold !important;
+}
+.bg-muted { background-color: #f7f7f7; }
+
+.muted-border {
+    border-bottom: 1px solid #e4e1e1;
+}
+
+.muted-border-top {
+    border-top: 1px solid #e4e1e1;
+}
+
+.fl-muted-border {
+    border: 1px solid #e4e1e1;
+}
+
+.components .user {
+    height: 15% !important;
+}
+ul {
+    list-style-type: none;
+}
+.other-info {
+    display: none;
+}
+.other-info-arrow i {
+    transition: .5s all;
+}
+.other-info-arrow-down {
+    transform: rotate(90deg);
+}
+.error-message {
+    color: red;
+}

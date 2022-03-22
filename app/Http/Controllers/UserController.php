@@ -12,8 +12,8 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')
-                ->only(['store', 'create']);
+        // $this->middleware('auth')
+        //         ->only(['store', 'create']);
     }
 
     /**
@@ -33,7 +33,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        return view('register');
     }
 
     /**
@@ -50,10 +50,8 @@ class UserController extends Controller
             'password'  => 'required|confirmed'
         ]);
 
-        $user['password'] = Hash::make($user['password']);
-
         Auth::login(User::create($user));
-        return redirect('/home');
+        return redirect('/dashboard');
     }
 
     /**

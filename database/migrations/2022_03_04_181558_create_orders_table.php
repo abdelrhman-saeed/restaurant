@@ -20,8 +20,7 @@ return new class extends Migration
             $table->smallInteger('table_id', unsigned:true);
             $table->foreign('table_id')->references('id')->on('tables');
 
-            $table->decimal('total_price', 7,2);
-            $table->tinyInteger('client_count');
+            $table->tinyInteger('customer_count');
         });
     }
 

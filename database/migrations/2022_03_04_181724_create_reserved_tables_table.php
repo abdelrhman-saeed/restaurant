@@ -22,6 +22,7 @@ return new class extends Migration
 
             $table->string('customer_name');
             $table->string('customer_email')->nullable();
+            
             $table->char('customer_phone', 11);
             $table->date('reserve_date');
         });

@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('resources', function (Blueprint $table) {
             $table->smallIncrements('id');
-            $table->timestamps();
-
+            
             $table->string('name');
             $table->decimal('price', 6,2);
-            $table->smallInteger('qunatity');
+
+            $table->smallInteger('quantity'); 
+            $table->timestamps();
         });
     }
 

@@ -9,7 +9,9 @@ class Resource extends Model
 {
     use HasFactory;
 
-    protected $fillalbe = [
-        'name', 'price', 'quantity'
+    protected $fillable = [
+        'name',
+        'price',
+        'quantity'
     ];
 }

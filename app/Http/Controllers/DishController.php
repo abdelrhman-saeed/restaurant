@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\food;
+use App\Models\Dish;
 use Illuminate\Http\Request;
 
-class FoodController extends Controller
+class DishController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class FoodController extends Controller
      */
     public function index()
     {
-        //
+        return view('dishes', ['dishes' => Dish::all()]);
     }
 
     /**
@@ -35,16 +35,23 @@ class FoodController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:dishes',
+            'price' => 'required'
+        ]);
+
+        Dish::create($request->only('name', 'price'));
+        return back();
+
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\food  $food
+     * @param  \App\Models\Dish  $Dish
      * @return \Illuminate\Http\Response
      */
-    public function show(food $food)
+    public function show(Dish $Dish)
     {
         //
     }
@@ -52,34 +59,42 @@ class FoodController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\food  $food
+     * @param  \App\Models\Dish  $Dish
      * @return \Illuminate\Http\Response
      */
-    public function edit(food $food)
+    public function edit(Dish $dish)
     {
-        //
+        return view('dishes_edit', ['dish' => $dish]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\food  $food
+     * @param  \App\Models\Dish  $Dish
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, food $food)
+    public function update(Request $request, Dish $dish)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required'
+        ]);
+
+        // dd($request->only('name', 'price'));
+        $dish->update($request->only('name', 'price'));
+        return redirect('dishes');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\food  $food
+     * @param  \App\Models\Dish  $Dish
      * @return \Illuminate\Http\Response
      */
-    public function destroy(food $food)
+    public function destroy(Dish $dish)
     {
-        //
+        $dish->delete();
+        return back();
     }
 }

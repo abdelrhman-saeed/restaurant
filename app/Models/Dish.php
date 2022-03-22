@@ -10,6 +10,6 @@ class Dish extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'price', 'day'
+        'name', 'price'
     ];
 }
