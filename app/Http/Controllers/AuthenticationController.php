@@ -9,12 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthenticationController extends Controller
 {
-    public function __construct()
-    {
-        // $this->middleware('guest')->except('logout');
-        // $this->middleware('auth')->only('logout');
-    }
-
     public function authentication() {
         return view('login');
     }
@@ -25,14 +19,12 @@ class AuthenticationController extends Controller
 
     public function authenticate(Request $request)
     {
-        $request->validate([
-            'name'      => 'required',
-            'password'  => 'required',
-        ]);
+        $request->validate(['name' => 'required','password' => 'required']);
 
         if (auth()->attempt($request->only('name', 'password'), $request->remember_me)) {
             return redirect('dashboard');
         }
+
         return back()->withErrors(['unauthorized' => ['Your Credentials are invalid']]);
     }
 
@@ -42,6 +34,7 @@ class AuthenticationController extends Controller
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        
         return redirect('login');
     }
 }

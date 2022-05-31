@@ -136,7 +136,7 @@ $('.update-btn').click(function (e)
         console.log(dataToSend);
 
         $.ajax({
-            url: 'http://localhost/restaurant/public/orders/' + dataToSend['order_id'],
+            url: 'http://localhost/work/restaurant/public/orders/' + dataToSend['order_id'],
             method: 'post',
             data: dataToSend,
             
@@ -229,7 +229,7 @@ $('form').submit(function (e) {
 
     $.ajax({
 
-        url: 'http://localhost/restaurant/public/orders',
+        url: 'http://localhost/work/restaurant/public/orders',
         method: 'post',
         data: dataToSend,
 
@@ -274,7 +274,7 @@ $('form').submit(function (e) {
 $('.delete-btn').click(function () {
     let orderList = $(this).parents('li');
     $.ajax({
-        url: 'http://localhost/restaurant/public/orders/' + orderList.attr('id'),
+        url: 'http://localhost/work/restaurant/public/orders/' + orderList.attr('id'),
         method: 'post',
         data: {
             _token: $('meta[name="csrf_token"]').attr('content'),

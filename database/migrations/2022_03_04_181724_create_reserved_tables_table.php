@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('customer_email')->nullable();
             
             $table->char('customer_phone', 11);
-            $table->tinyint('customer_count');
+            $table->tinyInteger('customer_count');
             
             $table->timestamps();
         });
